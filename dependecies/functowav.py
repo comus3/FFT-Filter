@@ -9,7 +9,10 @@ def generateWav(func, frequency, duration, sample_rate=44100, amplitude=1.0, out
 
 def generateWav2(y,sample_rate=44100, output_file="output.wav"):
     wavfile.write(output_file, sample_rate, y.astype(np.float32))
-
+def generateWavPydub(y,width,sample_rate=44100,output_file="output.wav"):
+    from pydub import AudioSegment
+    filtered_audio = AudioSegment(y.tobytes(), frame_rate=sample_rate, sample_width=width, channels=1)
+    filtered_audio.export(output_file, format="wav")
 if __name__ == "__main__":
     """
     Exemple d'utilisation : fonction sinusoïdale sur l'intervalle [0, 2*pi] pendant 3 secondes

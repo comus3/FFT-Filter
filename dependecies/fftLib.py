@@ -17,7 +17,7 @@ def plotFFT(fourierTranform):
     plt.title('Fourier Transform of the Signal')
     plt.grid(True)
     plt.show()
-def plotiFFT(fourierTransform,signal):
+def plotiFFT(fourierTransform,values):
     sum = ifft(fourierTransform)
     # Plot the original signal
     plt.figure(figsize=(12, 6))
