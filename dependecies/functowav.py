@@ -7,6 +7,9 @@ def generateWav(func, frequency, duration, sample_rate=44100, amplitude=1.0, out
     y = func(t, frequency)
     wavfile.write(output_file, sample_rate, y.astype(np.float32))
 
+def generateWav2(y,sample_rate=44100, output_file="output.wav"):
+    wavfile.write(output_file, sample_rate, y.astype(np.float32))
+
 if __name__ == "__main__":
     """
     Exemple d'utilisation : fonction sinusoïdale sur l'intervalle [0, 2*pi] pendant 3 secondes
