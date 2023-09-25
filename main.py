@@ -24,16 +24,25 @@ def filter(audio_data,cutoff,t):
 if __name__ == '__main__':
     startTime = 0.0
     sampleRate = 44100
-    func = lambda t, frequency:6 * np.sin(t*np.sin(frequency*np.pi*2))
+    #func = lambda t, frequency:6 * np.sin(t*np.sin(frequency*np.pi*2))
     #func = lambda t, frequency:4 *np.sin((frequency*2*np.pi)*10/np.exp(frequency*t/10))
+    func = lambda t , frequency:7*np.tan(np.sin(t*frequency*2*np.pi))
     import tkinter as tk
     from tkinter import messagebox
-    def openOutput():
+    def openOutput(file):
         import os
-        print("playing orignal sound")
-        os.startfile("original.wav")
-        print("playing final soundfile")
-        os.startfile("output.wav")
+        os.startfile(file)
+    def playOriginal():
+        try:
+            openOutput("original.wav")
+        except ValueError:
+            messagebox.showerror("Error", "Could not read wav... ):")
+    def playFiltered():
+        try:
+            openOutput("output.wav")
+        except ValueError:
+            messagebox.showerror("Error", "Could not read wav... ):")
+
     def generateWavButtonClicked():
         try:
             frequency = float(freq_entry.get())
@@ -74,9 +83,10 @@ if __name__ == '__main__':
 
 
     generate_button = tk.Button(root, text="Generate WAV", command=generateWavButtonClicked)
-
-
-
+    generate_button.pack()
+    generate_button = tk.Button(root, text="play original", command=playOriginal)
+    generate_button.pack()
+    generate_button = tk.Button(root, text="play filtered", command=playFiltered)
     generate_button.pack()
 
     root.mainloop()
