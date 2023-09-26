@@ -6,6 +6,7 @@ import math
 from scipy.io import wavfile
 import tkinter as tk
 from tkinter import messagebox
+import funcLib
 
 
 
@@ -13,7 +14,7 @@ def filter(audio_data,cutoff,t):
     audio_fft = fftLib.generateFFT(audio_data)
     frequency_axis = np.fft.fftfreq(len(audio_data))
     filter_fft = np.zeros(len(audio_data), dtype=np.complex128)
-    filter_fft[np.abs(frequency_axis) <= cutoff] = 0.5
+    filter_fft[np.abs(frequency_axis) <= cutoff] = 0.1
     filtered_audio_fft = audio_fft * filter_fft
     filtered_audio_data = np.real(ifft(filtered_audio_fft))
     return filtered_audio_data
@@ -82,9 +83,7 @@ def generateWavButtonClicked():
 if __name__ == '__main__':
     startTime = 0.0
     sampleRate = 44100
-    #func = lambda t, frequency:6 * np.sin(t*np.sin(frequency*np.pi*2))
-    #func = lambda t, frequency:4 *np.sin((frequency*2*np.pi)*10/np.exp(frequency*t/10))
-    func = lambda t , frequency:7*np.tan(np.sin(t*frequency*2*np.pi))
+    func = funcLib.func3
     
     root = tk.Tk()
     root.title("WAV Generator")
