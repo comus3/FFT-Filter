@@ -4,7 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.fft import fft,ifft
 
-
+def init(time):
+    global t
+    t = time
 def generateFFT(signal):
     return fft(signal)
 def plotFFT(fourierTranform):
