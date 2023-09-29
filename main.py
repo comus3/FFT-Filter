@@ -10,14 +10,14 @@ from tkinter import messagebox
 def filter(audio_data,cutoff,t):
     cutoff = cutoff/20000
     audio_fft = fftLib.generateFFT(audio_data)
-    fftLib.plotFFT(audio_fft)
+    #fftLib.plotFFT(audio_fft)
     frequency_axis = np.fft.fftfreq(len(audio_data))
     filter_fft = np.zeros(len(audio_data), dtype=np.complex128)
     filter_fft[np.abs(frequency_axis) <= cutoff] = 1.0
     filter_fft[np.abs(frequency_axis) >= cutoff] = np.abs(frequency_axis)*0.5
     plotFilter(filter_fft,frequency_axis)
     filtered_audio_fft = audio_fft * filter_fft
-    fftLib.plotFFT(filtered_audio_fft)
+    #fftLib.plotFFT(filtered_audio_fft)
     filtered_audio_data = np.real(ifft(filtered_audio_fft))
     return filtered_audio_data
 def plotFilter(filter,frequency_axis):
@@ -84,8 +84,13 @@ def generateWavButtonClicked():
             messagebox.showinfo("Success", "WAV file generated and played successfully!")
         else:
             messagebox.showerror("Error", "Invalid parameter values. Frequency must be in [0, 20 000] and duration in [0, 60] and cutoff in [0, 20 000].")
-    except ValueError:
-        messagebox.showerror("Error", "Could not generate wav... ):")
+    except OSError as err:
+        print("OS error:", err)
+    except ValueError as err:
+        print("Caught a valuer error: ", err)
+    except Exception as err:
+        print(f"Unexpected {err=}, {type(err)=}")
+        raise
 
 
 if __name__ == '__main__':
