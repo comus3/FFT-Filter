@@ -14,7 +14,7 @@ def plotFFT(fourierTranform):
     plt.plot(frequency_axis, magnitude)
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Magnitude')
-    plt.title('Fourier Transform of the Signal')
+    plt.title('Fourier Transform')
     plt.grid(True)
     plt.show()
 def plotiFFT(fourierTransform,values):
