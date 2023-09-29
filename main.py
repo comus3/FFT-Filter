@@ -7,17 +7,28 @@ from tkinter import messagebox
 
 
 
-def filter(audio_data,cutoff,t):
+def generateFilter(cutoff,type,dataLen,frequency_axis):
+    if type == "step":
+        filter_fft = np.zeros(dataLen, dtype=np.complex128)
+        filter_fft[np.abs(frequency_axis) <= cutoff] = 1.0
+        return filter_fft
+    if type == "linear":
+        filter_fft = frequency_axis
+        filter_fft[np.abs(frequency_axis) >= cutoff] = 0.1
+        return filter_fft
+    raise TypeError("Generate filter error: incorrect filter type")
+
+
+
+def filter(audio_data,cutoff,type):
     cutoff = cutoff/20000
     audio_fft = fftLib.generateFFT(audio_data)
-    #fftLib.plotFFT(audio_fft)
+    fftLib.plotFFT(audio_fft)
     frequency_axis = np.fft.fftfreq(len(audio_data))
-    filter_fft = np.zeros(len(audio_data), dtype=np.complex128)
-    filter_fft[np.abs(frequency_axis) <= cutoff] = 1.0
-    filter_fft[np.abs(frequency_axis) >= cutoff] = np.abs(frequency_axis)*0.5
+    filter_fft = generateFilter(cutoff,type,len(audio_data),frequency_axis)
     plotFilter(filter_fft,frequency_axis)
     filtered_audio_fft = audio_fft * filter_fft
-    #fftLib.plotFFT(filtered_audio_fft)
+    fftLib.plotFFT(filtered_audio_fft)
     filtered_audio_data = np.real(ifft(filtered_audio_fft))
     return filtered_audio_data
 def plotFilter(filter,frequency_axis):
@@ -70,15 +81,17 @@ def generateWavButtonClicked():
         global values
         global filteredSignal
         global t
+        filterType = "linear"
         frequency = float(freq_entry.get())
         duration = float(duration_entry.get())
         cutoff = float(cutoff_entry.get())
         endTime = startTime+duration
         sampleWidth = 4
         t = np.linspace(startTime, endTime, int((endTime - startTime) * sampleRate), endpoint=False)
+        fftLib.init(t)
         values = func(t, frequency)
         if 0 <= frequency <= 20000 and 0 <= duration <= 60 and cutoff <= 20000:
-            filteredSignal = filter(values,cutoff,t)
+            filteredSignal = filter(values,cutoff,filterType)
             functowav.generateWavPydub(filteredSignal,sampleWidth,sampleRate)
             functowav.generateWavPydub(values,sampleWidth,sampleRate,"original.wav")
             messagebox.showinfo("Success", "WAV file generated and played successfully!")
@@ -95,6 +108,7 @@ def generateWavButtonClicked():
 
 if __name__ == '__main__':
     global sampleRate
+
     startTime = 0.0
     sampleRate = 44100
     func = funcLib.sineSum
