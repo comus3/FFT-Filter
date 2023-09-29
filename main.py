@@ -1,4 +1,4 @@
-from dependecies import fftLib,functowav
+from dependecies import fftLib,functowav,funcLib
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.fft import fft,ifft
@@ -6,7 +6,6 @@ import math
 from scipy.io import wavfile
 import tkinter as tk
 from tkinter import messagebox
-import funcLib
 
 
 
