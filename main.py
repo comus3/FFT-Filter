@@ -10,14 +10,25 @@ from tkinter import messagebox
 
 
 def filter(audio_data,cutoff,t):
+    cutoff = cutoff/20000
     audio_fft = fftLib.generateFFT(audio_data)
+    fftLib.plotFFT(audio_fft)
     frequency_axis = np.fft.fftfreq(len(audio_data))
     filter_fft = np.zeros(len(audio_data), dtype=np.complex128)
-    filter_fft[np.abs(frequency_axis) <= cutoff] = 0.1
+    filter_fft[np.abs(frequency_axis) <= cutoff] = 1.0
+    filter_fft[np.abs(frequency_axis) >= cutoff] = np.abs(frequency_axis)*0.5
+    plotFilter(filter_fft,frequency_axis)
     filtered_audio_fft = audio_fft * filter_fft
+    fftLib.plotFFT(filtered_audio_fft)
     filtered_audio_data = np.real(ifft(filtered_audio_fft))
     return filtered_audio_data
-
+def plotFilter(filter,frequency_axis):
+    plt.plot(frequency_axis,np.abs(filter))
+    plt.xlabel('Fz')
+    plt.ylabel('Magnitude')
+    plt.grid(True)
+    plt.title('filter shape')
+    plt.show()
 
 def openOutput(file):
     import os
@@ -80,9 +91,10 @@ def generateWavButtonClicked():
 
 
 if __name__ == '__main__':
+    global sampleRate
     startTime = 0.0
     sampleRate = 44100
-    func = funcLib.func3
+    func = funcLib.sineSum
     
     root = tk.Tk()
     root.title("WAV Generator")
