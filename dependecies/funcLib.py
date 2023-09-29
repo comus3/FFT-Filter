@@ -6,7 +6,7 @@ def triangle(t,frequency):
 def sineSum(t,frequency):
     res = 0
     for i in range(100):
-        res= res+np.sin((i+frequency)*(t-2*i)*2*np.pi)
+        res= res+(3+i/100)*np.sin((i+frequency)*(t-2*i)*2*np.pi)
     return res
 def sine(t,frequency):
     return np.sin(t*frequency*2*np.pi)
